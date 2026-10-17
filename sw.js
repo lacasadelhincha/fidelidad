@@ -1,4 +1,4 @@
-const CACHE_NAME = 'hincha-fidelidad-v2';
+const CACHE_NAME = 'hincha-fidelidad-v3';
 const ASSETS = [
   'index.html',
   'manifest.json',
@@ -24,7 +24,7 @@ self.addEventListener('activate', e => {
           }
         })
       );
-    })
+    }).then(() => self.clients.claim())
   );
 });
 
