@@ -1,9 +1,9 @@
-const CACHE_NAME = 'hincha-fidelidad-v5';
+const CACHE_NAME = 'hincha-fidelidad-v6';
 const ASSETS = [
-  'index.html',
-  'manifest.json',
-  'logo-color.png',
-  'logo-bn.png'
+  './index.html',
+  './manifest.json',
+  './logo-color.png',
+  '././logo-bn.png'
 ];
 
 self.addEventListener('install', e => {
