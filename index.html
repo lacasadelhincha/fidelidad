@@ -49,7 +49,6 @@
             padding: 20px;
             text-align: center;
             border-bottom: 4px solid var(--dorado);
-            position: relative;
         }
 
         .card-header img {
@@ -100,7 +99,6 @@
             justify-content: center;
             align-items: center;
             position: relative;
-            transition: all 0.3s ease;
         }
 
         .casilla.sellada {
@@ -128,12 +126,6 @@
 
         .casilla.sellada .sello-img {
             display: block;
-            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        @keyframes popIn {
-            0% { transform: scale(0); }
-            100% { transform: scale(1); }
         }
 
         .status-box {
@@ -159,28 +151,25 @@
             font-weight: bold;
             text-transform: uppercase;
             cursor: pointer;
-            box-shadow: 0 4px 10px rgba(16, 185, 129, 0.4);
-            animation: pulse 1.5s infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.03); }
-            100% { transform: scale(1); }
+            margin-bottom: 15px;
         }
 
         .admin-panel {
             margin-top: 25px;
             border-top: 2px solid #e2e8f0;
             padding-top: 15px;
+            text-align: center;
         }
 
         .admin-toggle {
-            text-align: center;
-            font-size: 0.8rem;
-            color: #94a3b8;
+            font-size: 0.85rem;
+            color: #718096;
             cursor: pointer;
             text-decoration: underline;
+            background: none;
+            border: none;
+            width: 100%;
+            padding: 5px;
         }
 
         .admin-controls {
@@ -233,7 +222,7 @@
         <p class="info-text">¡Sella tu pasión! Completa los 10 consumos y reclama tu premio de la casa</p>
         
         <div class="grid-tablero" id="tablero">
-            <!-- Casillas generadas por JavaScript -->
+            <!-- JavaScript generará las casillas aquí -->
         </div>
 
         <div class="status-box" id="status-text">
@@ -245,7 +234,7 @@
         </button>
 
         <div class="admin-panel">
-            <p class="admin-toggle" onclick="toggleAdmin()">⚙️ Panel de Control Interno (Uso del Kiosko)</p>
+            <button class="admin-toggle" onclick="toggleAdmin()">⚙️ Panel de Control Interno (Uso del Kiosko)</button>
             <div class="admin-controls" id="admin-box">
                 <input type="password" id="pin-input" placeholder="Introduce PIN de Kiosko" inputmode="numeric">
                 <div class="admin-buttons">
@@ -305,7 +294,11 @@
 
     function toggleAdmin() {
         const box = document.getElementById('admin-box');
-        box.style.display = box.style.display === 'block' ? 'none' : 'block';
+        if (box.style.display === 'block') {
+            box.style.display = 'none';
+        } else {
+            box.style.display = 'block';
+        }
     }
 
     function validarYModificar(accion) {
@@ -335,13 +328,14 @@
     }
 
     function reclamarPremio() {
-alert("🎉 ¡Felicidades! Entrega el premio al Hincha y usa el panel interno con tu PIN para reiniciar su tarjeta.");
-}
-if ('serviceWorker' in navigator) {
-window.addEventListener('load', () => {
-navigator.serviceWorker.register('sw.js')
-.then(reg => console.log('Service Worker activo'))
-.catch(err => console.log('Error registrando SW', err));
+        alert("🎉 ¡Felicidades! Entrega el premio al Hincha y usa el panel interno con tu PIN para reiniciar su tarjeta.");
+    }
+
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('sw.js')
+                .then(reg => console.log('Service Worker activo'))
+                .catch(err => console.log('Error registrando SW', err));
 });
 }
 inicializarTablero();
