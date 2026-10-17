@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Casa del Hincha - Fidelidad</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#b61c1c">
+    <style>
+        :root {
+            --rojo-principal: #b61c1c;
+            --azul-oscuro: #0d2347;
+            --dorado: #dfa72b;
+            --blanco: #ffffff;
+            --gris-fondo: #f4f6f9;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--azul-oscuro);
+            background-image: linear-gradient(135deg, var(--azul-oscuro) 0%, #050e1e 100%);
+            color: var(--blanco);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 15px;
+        }
+
+        .card-container {
+            background-color: var(--blanco);
+            color: #333;
+            width: 100%;
+            max-width: 400px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            overflow: hidden;
+            border: 4px solid var(--dorado);
+        }
+
+        .card-header {
+            background-color: var(--rojo-principal);
+            padding: 20px;
+            text-align: center;
+            border-bottom: 4px solid var(--dorado);
+            position: relative;
+        }
+
+        .card-header img {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            border: 3px solid var(--dorado);
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            object-fit: cover;
+        }
+
+        .card-header h2 {
+            color: var(--dorado);
+            font-size: 1.4rem;
+            margin-top: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+        }
+
+        .card-body {
+            padding: 20px;
+            background-color: var(--gris-fondo);
+        }
+
+        .info-text {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #555;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .grid-tablero {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .casilla {
+            aspect-ratio: 1;
+            background-color: #e2e8f0;
+            border: 2px dashed #cbd5e1;
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .casilla.sellada {
+            background-color: var(--blanco);
+            border: 2px solid var(--dorado);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .casilla .numero {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #94a3b8;
+        }
+
+        .casilla.sellada .numero {
+            display: none;
+        }
+
+        .casilla .sello-img {
+            display: none;
+            width: 85%;
+            height: 85%;
+            object-fit: contain;
+        }
+
+        .casilla.sellada .sello-img {
+            display: block;
+            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0); }
+            100% { transform: scale(1); }
+        }
+
+        .status-box {
+            background-color: var(--azul-oscuro);
+            color: var(--blanco);
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 15px;
+            border: 1px solid var(--dorado);
+        }
+
+        .btn-premio {
+            display: none;
+            width: 100%;
+            background-color: #10b981;
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(16, 185, 129, 0.4);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+            100% { transform: scale(1); }
+        }
+
+        .admin-panel {
+            margin-top: 25px;
+            border-top: 2px solid #e2e8f0;
+            padding-top: 15px;
+        }
+
+        .admin-toggle {
+            text-align: center;
+            font-size: 0.8rem;
+            color: #94a3b8;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        .admin-controls {
+            display: none;
+            margin-top: 10px;
+            background: #eddcd2;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid #cb997e;
+        }
+
+        .admin-controls input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 1rem;
+        }
+
+        .admin-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .btn-action {
+            padding: 8px;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn-add { background-color: var(--azul-oscuro); }
+        .btn-reset { background-color: var(--rojo-principal); }
+    </style>
+</head>
+<body>
+
+<div class="card-container">
+    <div class="card-header">
+        <img src="logo-color.png" alt="La Casa Del Hincha">
+        <h2>Club de Hinchas</h2>
+    </div>
+    
+    <div class="card-body">
+        <p class="info-text">¡Sella tu pasión! Completa los 10 consumos y reclama tu premio de la casa</p>
+        
+        <div class="grid-tablero" id="tablero">
+            <!-- Casillas generadas por JavaScript -->
+        </div>
+
+        <div class="status-box" id="status-text">
+            Tienes 0 / 10 Sellos
+        </div>
+
+        <button class="btn-premio" id="btn-premio" onclick="reclamarPremio()">
+            🎁 ¡Reclamar Premio Recompensa!
+        </button>
+
+        <div class="admin-panel">
+            <p class="admin-toggle" onclick="toggleAdmin()">⚙️ Panel de Control Interno (Uso del Kiosko)</p>
+            <div class="admin-controls" id="admin-box">
+                <input type="password" id="pin-input" placeholder="Introduce PIN de Kiosko" inputmode="numeric">
+                <div class="admin-buttons">
+                    <button class="btn-action btn-add" onclick="validarYModificar(1)">+ Añadir Sello</button>
+                    <button class="btn-action btn-reset" onclick="validarYModificar(0)">Reiniciar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const PIN_SECRET = "8788"; 
+    const TOTAL_METAS = 10;
+
+    let puntosActuales = parseInt(localStorage.getItem('puntos_hincha')) || 0;
+
+    function inicializarTablero() {
+        const tablero = document.getElementById('tablero');
+        tablero.innerHTML = '';
+        
+        for (let i = 1; i <= TOTAL_METAS; i++) {
+            const casilla = document.createElement('div');
+            casilla.className = `casilla ${i <= puntosActuales ? 'sellada' : ''}`;
+            
+            const numero = document.createElement('span');
+            numero.className = 'numero';
+            numero.innerText = i;
+            
+            const imgSello = document.createElement('img');
+            imgSello.className = 'sello-img';
+            imgSello.src = "logo-bn.png";
+            imgSello.alt = "Sello Hincha";
+            
+            casilla.appendChild(numero);
+            casilla.appendChild(imgSello);
+            tablero.appendChild(casilla);
+        }
+        
+        actualizarEstado();
+    }
+
+    function actualizarEstado() {
+        const statusText = document.getElementById('status-text');
+        const btnPremio = document.getElementById('btn-premio');
+        
+        statusText.innerText = `Tienes ${puntosActuales} / ${TOTAL_METAS} Sellos`;
+        
+        if (puntosActuales >= TOTAL_METAS) {
+            btnPremio.style.display = 'block';
+            statusText.style.backgroundColor = '#10b981';
+        } else {
+            btnPremio.style.display = 'none';
+            statusText.style.backgroundColor = 'var(--azul-oscuro)';
+        }
+    }
+
+    function toggleAdmin() {
+        const box = document.getElementById('admin-box');
+        box.style.display = box.style.display === 'block' ? 'none' : 'block';
+    }
+
+    function validarYModificar(accion) {
+        const pinIngresado = document.getElementById('pin-input').value;
+        
+        if (pinIngresado !== PIN_SECRET) {
+            alert("❌ PIN incorrecto. Acceso denegado.");
+            return;
+        }
+        
+        if (accion === 1) {
+            if (puntosActuales < TOTAL_METAS) {
+                puntosActuales++;
+            } else {
+                alert("El cliente ya alcanzó la meta máxima. Debe reclamar el premio.");
+            }
+        } else if (accion === 0) {
+            if(confirm("¿Estás seguro de reiniciar la tarjeta a 0 sellos?")) {
+                puntosActuales = 0;
+            }
+        }
+        
+        localStorage.setItem('puntos_hincha', puntosActuales);
+        document.getElementById('pin-input').value = '';
+        inicializarTablero();
+        toggleAdmin();
+    }
+
+    function reclamarPremio() {
+alert("🎉 ¡Felicidades! Entrega el premio al Hincha y usa el panel interno con tu PIN para reiniciar su tarjeta.");
+}
+if ('serviceWorker' in navigator) {
+window.addEventListener('load', () => {
+navigator.serviceWorker.register('sw.js')
+.then(reg => console.log('Service Worker activo'))
+.catch(err => console.log('Error registrando SW', err));
+});
+}
+inicializarTablero();
