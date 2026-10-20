@@ -53,11 +53,12 @@
         }
 
         .saludo-dinamico {
-            color: var(--blanco);
+            color: var(--dorado); /* Mismo color dorado que el título CLUB LCH */
             font-size: 1.4rem;
             font-weight: bold;
             margin-bottom: 12px;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.6);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+            cursor: pointer;
         }
 
         .card-header img {
@@ -84,13 +85,22 @@
             background-color: var(--gris-fondo);
         }
 
-        .info-text {
+        .info-container {
             text-align: center;
-            font-size: 0.78rem; /* Texto más pequeño para que quepa en una sola línea */
-            color: #555;
             margin-bottom: 15px;
+        }
+
+        .info-linea-1 {
+            font-size: 0.95rem;
+            color: #333;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        .info-linea-2 {
+            font-size: 0.72rem; /* Tamaño optimizado para que entre completo de forma horizontal */
+            color: #555;
             font-weight: 600;
-            white-space: nowrap; /* Fuerza a que se mantenga en una sola línea */
         }
 
         .grid-tablero {
@@ -167,7 +177,7 @@
 
         .reglas-adicionales {
             text-align: center;
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             color: #4a5568;
             margin-top: 10px;
             margin-bottom: 15px;
@@ -198,24 +208,27 @@
 
 <div class="card-container">
     <div class="card-header">
-        <!-- Saludo dinámico solicitado antes del logo -->
-        <div class="saludo-dinamico" id="saludo-texto">¡Hola Hincha!</div>
+        <!-- Saludo dinámico en dorado. Al presionarlo permite cambiar el nombre si se desea -->
+        <div class="saludo-dinamico" id="saludo-texto" onclick="cambiarNombreManual()">¡Hola Hincha!</div>
         <img src="logo-color.png" alt="La Casa Del Hincha">
         <h2>CLUB LCH</h2>
     </div>
     
     <div class="card-body">
-        <p class="info-text">¡Sella tu pasión! Completa los 10 consumos y reclama tu premio de la casa</p>
+        <!-- Texto estructurado en dos líneas independientes y centradas -->
+        <div class="info-container">
+            <div class="info-linea-1">¡Sella tu pasión!</div>
+            <div class="info-linea-2">Completa los 10 consumos y reclama tu premio de la casa</div>
+        </div>
         
         <div class="grid-tablero" id="tablero">
-            <!-- Casillas mapeadas por JavaScript -->
+            <!-- Cuadrícula de 10 casillas controlada por JavaScript -->
         </div>
 
         <div class="status-box" id="status-text">
             Tienes 0 / 10 Sellos
         </div>
 
-        <!-- Nueva distribución en una sola línea -->
         <div class="reglas-adicionales">
             * 1 Sello por cada $5.00 de consumo, 1 sello por semana.
         </div>
@@ -236,7 +249,6 @@
 
     let puntosActuales = parseInt(localStorage.getItem('puntos_hincha')) || 0;
 
-    // Función que solicita el nombre antes de visualizar la tarjeta por completo
     function verificarNombreCliente() {
         let nombreGuardado = localStorage.getItem('nombre_hincha');
         
@@ -252,6 +264,14 @@
         }
         
         document.getElementById('saludo-texto').innerText = `¡Hola ${nombreGuardado}!`;
+    }
+
+    function cambiarNombreManual() {
+        let nuevoNombre = prompt("Modificar nombre de la tarjeta:", localStorage.getItem('nombre_hincha') || "");
+        if (nuevoNombre !== null && nuevoNombre.trim() !== "") {
+            localStorage.setItem('nombre_hincha', nuevoNombre.trim());
+            document.getElementById('saludo-texto').innerText = `¡Hola ${nuevoNombre.trim()}!`;
+        }
     }
 
     function inicializarTablero() {
@@ -303,23 +323,21 @@
             alert("❌ PIN incorrecto. Acceso denegado.");
             return;
         }
-
-        const opcion = prompt("PIN Correcto.\nEscribe '1' para Añadir Sello.\nEscribe '0' para Reiniciar la tarjeta a cero:");
-        
-        if (opcion === "1") {
-            if (puntosActuales < TOTAL_METAS) {
-                puntosActuales++;
-                localStorage.setItem('puntos_hincha', puntosActuales);
-                inicializarTablero();
-            } else {
-                alert("El cliente ya alcanzó la meta máxima. Debe reclamar el premio.");
-            }
-        } else if (opcion === "0") {
-            if(confirm("¿Estás seguro de reiniciar la tarjeta a 0 sellos?")) {
-                puntosActuales = 0;
-                localStorage.setItem('puntos_hincha', puntosActuales);
-                inicializarTablero();
-            }
+const opcion = prompt("PIN Correcto.\nEscribe '1' para Añadir Sello.\nEscribe '0' para Reiniciar la tarjeta a cero:");
+if (opcion === "1") {
+if (puntosActuales < TOTAL_METAS) {
+puntosActuales++;
+localStorage.setItem('puntos_hincha', puntosActuales);
+inicializarTablero();
+} else {
+alert("El cliente ya alcanzó la meta máxima. Debe reclamar el premio.");
+}
+} else if (opcion === "0") {
+if(confirm("¿Estás seguro de reiniciar la tarjeta a 0 sellos?")) {
+puntosActuales = 0;
+localStorage.setItem('puntos_hincha', puntosActuales);
+inicializarTablero();
+}
 } else if (opcion !== null) {
 alert("Opción no válida.");
 }
@@ -334,6 +352,6 @@ navigator.serviceWorker.register('sw.js')
 .catch(err => console.log('Error registrando SW', err));
 });
 }
-// Inicializaciones ordenadas
 verificarNombreCliente();
 inicializarTablero();
+
