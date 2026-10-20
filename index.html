@@ -52,6 +52,14 @@
             position: relative;
         }
 
+        .saludo-dinamico {
+            color: var(--blanco);
+            font-size: 1.4rem;
+            font-weight: bold;
+            margin-bottom: 12px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.6);
+        }
+
         .card-header img {
             width: 130px;
             height: 130px;
@@ -78,10 +86,11 @@
 
         .info-text {
             text-align: center;
-            font-size: 0.9rem;
+            font-size: 0.78rem; /* Texto más pequeño para que quepa en una sola línea */
             color: #555;
             margin-bottom: 15px;
             font-weight: 600;
+            white-space: nowrap; /* Fuerza a que se mantenga en una sola línea */
         }
 
         .grid-tablero {
@@ -189,14 +198,15 @@
 
 <div class="card-container">
     <div class="card-header">
+        <!-- Saludo dinámico solicitado antes del logo -->
+        <div class="saludo-dinamico" id="saludo-texto">¡Hola Hincha!</div>
         <img src="logo-color.png" alt="La Casa Del Hincha">
-        <h2>CLUB DE HINCHAS</h2>
+        <h2>CLUB LCH</h2>
     </div>
     
     <div class="card-body">
-        <p class="info-text">¡Sella tu pasión!<br>Completa los 10 consumos y reclama tu premio de la casa</p>
+        <p class="info-text">¡Sella tu pasión! Completa los 10 consumos y reclama tu premio de la casa</p>
         
-        <!-- Tablero de 10 casillas restaurado intacto -->
         <div class="grid-tablero" id="tablero">
             <!-- Casillas mapeadas por JavaScript -->
         </div>
@@ -205,10 +215,9 @@
             Tienes 0 / 10 Sellos
         </div>
 
-        <!-- Bloque de texto para tus nuevas reglas impresas en pantalla -->
+        <!-- Nueva distribución en una sola línea -->
         <div class="reglas-adicionales">
-            * 1 Sello por cada \$5 de consumo<br>
-            * un sello por semana
+            * 1 Sello por cada $5.00 de consumo, 1 sello por semana.
         </div>
 
         <button class="btn-premio" id="btn-premio" onclick="reclamarPremio()">
@@ -226,6 +235,24 @@
     const TOTAL_METAS = 10;
 
     let puntosActuales = parseInt(localStorage.getItem('puntos_hincha')) || 0;
+
+    // Función que solicita el nombre antes de visualizar la tarjeta por completo
+    function verificarNombreCliente() {
+        let nombreGuardado = localStorage.getItem('nombre_hincha');
+        
+        if (!nombreGuardado) {
+            let nombreIngresado = prompt("¡Hola Hincha! Para personalizar tu tarjeta de fidelidad, por favor ingresa tu Nombre:");
+            
+            if (nombreIngresado === null || nombreIngresado.trim() === "") {
+                nombreGuardado = "Hincha";
+            } else {
+                nombreGuardado = nombreIngresado.trim();
+            }
+            localStorage.setItem('nombre_hincha', nombreGuardado);
+        }
+        
+        document.getElementById('saludo-texto').innerText = `¡Hola ${nombreGuardado}!`;
+    }
 
     function inicializarTablero() {
         const tablero = document.getElementById('tablero');
@@ -293,26 +320,20 @@
                 localStorage.setItem('puntos_hincha', puntosActuales);
                 inicializarTablero();
             }
-        } else if (opcion !== null) {
-            alert("Opción no válida.");
-        }
-    }
-
-    function reclamarPremio() {
-        alert("🎉 ¡Felicidades! Entrega el premio al Hincha y usa el panel interno con tu PIN para reiniciar su tarjeta.");
-    }
-
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-            navigator.serviceWorker.register('sw.js')
-                .then(reg => console.log('Service Worker activo'))
-                .catch(err => console.log('Error registrando SW', err));
-        });
-    }
-
-    inicializarTablero();
-</script>
-
-</body>
-</html>
-
+} else if (opcion !== null) {
+alert("Opción no válida.");
+}
+}
+function reclamarPremio() {
+alert("🎉 ¡Felicidades! Entrega el premio al Hincha y usa el panel interno con tu PIN para reiniciar su tarjeta.");
+}
+if ('serviceWorker' in navigator) {
+window.addEventListener('load', () => {
+navigator.serviceWorker.register('sw.js')
+.then(reg => console.log('Service Worker activo'))
+.catch(err => console.log('Error registrando SW', err));
+});
+}
+// Inicializaciones ordenadas
+verificarNombreCliente();
+inicializarTablero();
