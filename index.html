@@ -53,7 +53,7 @@
         }
 
         .saludo-dinamico {
-            color: var(--dorado); /* Mismo color dorado que el título CLUB LCH */
+            color: var(--dorado);
             font-size: 1.4rem;
             font-weight: bold;
             margin-bottom: 12px;
@@ -85,22 +85,27 @@
             background-color: var(--gris-fondo);
         }
 
-        .info-container {
+        /* Contenedor corregido para forzar dos líneas independientes centradas */
+        .bloque-informativo {
             text-align: center;
-            margin-bottom: 15px;
+            margin-bottom: 18px;
+            width: 100%;
+            display: block;
         }
 
-        .info-linea-1 {
-            font-size: 0.95rem;
-            color: #333;
+        .renglon-pasion {
+            font-size: 1rem;
+            color: #1a202c;
             font-weight: 700;
-            margin-bottom: 2px;
+            margin-bottom: 4px;
+            display: block;
         }
 
-        .info-linea-2 {
-            font-size: 0.72rem; /* Tamaño optimizado para que entre completo de forma horizontal */
-            color: #555;
+        .renglon-premio {
+            font-size: 0.74rem;
+            color: #4a5568;
             font-weight: 600;
+            display: block;
         }
 
         .grid-tablero {
@@ -108,6 +113,7 @@
             grid-template-columns: repeat(5, 1fr);
             gap: 12px;
             margin-bottom: 20px;
+            width: 100%;
         }
 
         .casilla {
@@ -119,7 +125,6 @@
             justify-content: center;
             align-items: center;
             position: relative;
-            transition: all 0.3s ease;
         }
 
         .casilla.sellada {
@@ -158,6 +163,7 @@
             font-weight: bold;
             margin-bottom: 15px;
             border: 1px solid var(--dorado);
+            width: 100%;
         }
 
         .btn-premio {
@@ -183,6 +189,7 @@
             margin-bottom: 15px;
             font-weight: 600;
             line-height: 1.5;
+            width: 100%;
         }
 
         .admin-panel {
@@ -190,6 +197,7 @@
             border-top: 2px solid #e2e8f0;
             padding-top: 15px;
             text-align: center;
+            width: 100%;
         }
 
         .admin-toggle {
@@ -208,21 +216,20 @@
 
 <div class="card-container">
     <div class="card-header">
-        <!-- Saludo dinámico en dorado. Al presionarlo permite cambiar el nombre si se desea -->
         <div class="saludo-dinamico" id="saludo-texto" onclick="cambiarNombreManual()">¡Hola Hincha!</div>
         <img src="logo-color.png" alt="La Casa Del Hincha">
         <h2>CLUB LCH</h2>
     </div>
     
     <div class="card-body">
-        <!-- Texto estructurado en dos líneas independientes y centradas -->
-        <div class="info-container">
-            <div class="info-linea-1">¡Sella tu pasión!</div>
-            <div class="info-linea-2">Completa los 10 consumos y reclama tu premio de la casa</div>
+        <!-- Estructura renovada y protegida contra desbordamientos -->
+        <div class="bloque-informativo">
+            <span class="renglon-pasion">¡Sella tu pasión!</span>
+            <span class="renglon-premio">Completa los 10 consumos y reclama tu premio de la casa</span>
         </div>
         
         <div class="grid-tablero" id="tablero">
-            <!-- Cuadrícula de 10 casillas controlada por JavaScript -->
+            <!-- Cuadrícula automática -->
         </div>
 
         <div class="status-box" id="status-text">
