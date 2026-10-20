@@ -85,7 +85,6 @@
             background-color: var(--gris-fondo);
         }
 
-        /* Contenedor corregido para forzar dos líneas independientes centradas */
         .bloque-informativo {
             text-align: center;
             margin-bottom: 18px;
@@ -222,7 +221,6 @@
     </div>
     
     <div class="card-body">
-        <!-- Estructura renovada y protegida contra desbordamientos -->
         <div class="bloque-informativo">
             <span class="renglon-pasion">¡Sella tu pasión!</span>
             <span class="renglon-premio">Completa los 10 consumos y reclama tu premio de la casa</span>
@@ -237,7 +235,7 @@
         </div>
 
         <div class="reglas-adicionales">
-            * 1 Sello por cada $5.00 de consumo, 1 sello por semana.
+            * 1 Sello por cada 5.00 USD de consumo, 1 sello por semana.
         </div>
 
         <button class="btn-premio" id="btn-premio" onclick="reclamarPremio()">
@@ -330,9 +328,11 @@
             alert("❌ PIN incorrecto. Acceso denegado.");
             return;
         }
-const opcion = prompt("PIN Correcto.\nEscribe '1' para Añadir Sello.\nEscribe '0' para Reiniciar la tarjeta a cero:");
-if (opcion === "1") {
-if (puntosActuales < TOTAL_METAS) {
+
+        const opcion = prompt("PIN Correcto.\nEscribe '1' para Añadir Sello.\nEscribe '0' para Reiniciar la tarjeta a cero:");
+        
+        if (opcion === "1") {
+            if (puntosActuales < TOTAL_METAS) {
 puntosActuales++;
 localStorage.setItem('puntos_hincha', puntosActuales);
 inicializarTablero();
