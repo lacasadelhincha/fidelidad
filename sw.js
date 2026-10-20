@@ -1,4 +1,4 @@
-const CACHE_NAME = 'hincha-fidelidad-v7';
+const CACHE_NAME = 'hincha-fidelidad-v10';
 const ASSETS = [
   './index.html',
   './manifest.json',
