@@ -49,16 +49,14 @@
             padding: 20px;
             text-align: center;
             border-bottom: 4px solid var(--dorado);
-            position: relative;
         }
 
         .saludo-dinamico {
             color: var(--dorado);
-            font-size: 1.4rem;
+            font-size: 1.5rem;
             font-weight: bold;
             margin-bottom: 12px;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
-            cursor: pointer;
         }
 
         .card-header img {
@@ -83,30 +81,29 @@
         .card-body {
             padding: 20px;
             background-color: var(--gris-fondo);
+            text-align: center;
         }
 
         .bloque-informativo {
-            text-align: center;
             margin-bottom: 18px;
-            width: 100%;
-            display: block;
         }
 
         .renglon-pasion {
-            font-size: 1rem;
+            font-size: 1.1rem;
             color: #1a202c;
             font-weight: 700;
-            margin-bottom: 4px;
             display: block;
+            margin-bottom: 4px;
         }
 
         .renglon-premio {
-            font-size: 0.74rem;
+            font-size: 0.78rem;
             color: #4a5568;
             font-weight: 600;
             display: block;
         }
 
+        /* Forzamos a que la cuadrícula exista directamente en el diseño básico */
         .grid-tablero {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
@@ -138,19 +135,11 @@
             color: #94a3b8;
         }
 
-        .casilla.sellada .numero {
-            display: none;
-        }
-
         .casilla .sello-img {
             display: none;
             width: 85%;
             height: 85%;
             object-fit: contain;
-        }
-
-        .casilla.sellada .sello-img {
-            display: block;
         }
 
         .status-box {
@@ -162,7 +151,16 @@
             font-weight: bold;
             margin-bottom: 15px;
             border: 1px solid var(--dorado);
-            width: 100%;
+            font-size: 1.1rem;
+        }
+
+        .reglas-adicionales {
+            font-size: 0.82rem;
+            color: #4a5568;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            font-weight: 600;
+            line-height: 1.5;
         }
 
         .btn-premio {
@@ -178,36 +176,21 @@
             text-transform: uppercase;
             cursor: pointer;
             box-shadow: 0 4px 10px rgba(16, 185, 129, 0.4);
-        }
-
-        .reglas-adicionales {
-            text-align: center;
-            font-size: 0.82rem;
-            color: #4a5568;
-            margin-top: 10px;
             margin-bottom: 15px;
-            font-weight: 600;
-            line-height: 1.5;
-            width: 100%;
         }
 
-        .admin-panel {
-            margin-top: 25px;
-            border-top: 2px solid #e2e8f0;
-            padding-top: 15px;
-            text-align: center;
+        /* Convertimos el panel en un botón físico grande para que no falle el clic */
+        .btn-admin-fijo {
             width: 100%;
-        }
-
-        .admin-toggle {
+            background-color: #cbd5e1;
+            color: #4a5568;
+            border: 1px solid #94a3b8;
+            padding: 10px;
+            border-radius: 8px;
             font-size: 0.85rem;
-            color: #718096;
+            font-weight: bold;
             cursor: pointer;
-            text-decoration: underline;
-            background: none;
-            border: none;
-            width: 100%;
-            padding: 5px;
+            margin-top: 15px;
         }
     </style>
 </head>
@@ -215,7 +198,7 @@
 
 <div class="card-container">
     <div class="card-header">
-        <div class="saludo-dinamico" id="saludo-texto" onclick="cambiarNombreManual()">¡Hola Hincha!</div>
+        <div class="saludo-dinamico" id="saludo-texto">¡Hola!</div>
         <img src="logo-color.png" alt="La Casa Del Hincha">
         <h2>CLUB LCH</h2>
     </div>
@@ -226,8 +209,18 @@
             <span class="renglon-premio">Completa los 10 consumos y reclama tu premio de la casa</span>
         </div>
         
-        <div class="grid-tablero" id="tablero">
-            <!-- Cuadrícula automática -->
+        <!-- Cuadrícula fija grabada en la estructura HTML base -->
+        <div class="grid-tablero" id="tablero-fijo">
+            <div class="casilla" id="c1"><span class="numero" id="n1">1</span><img class="sello-img" id="img1" src="logo-bn.png"></div>
+            <div class="casilla" id="c2"><span class="numero" id="n2">2</span><img class="sello-img" id="img2" src="logo-bn.png"></div>
+            <div class="casilla" id="c3"><span class="numero" id="n3">3</span><img class="sello-img" id="img3" src="logo-bn.png"></div>
+            <div class="casilla" id="c4"><span class="numero" id="n4">4</span><img class="sello-img" id="img4" src="logo-bn.png"></div>
+            <div class="casilla" id="c5"><span class="numero" id="n5">5</span><img class="sello-img" id="img5" src="logo-bn.png"></div>
+            <div class="casilla" id="c6"><span class="numero" id="n6">6</span><img class="sello-img" id="img6" src="logo-bn.png"></div>
+            <div class="casilla" id="c7"><span class="numero" id="n7">7</span><img class="sello-img" id="img7" src="logo-bn.png"></div>
+            <div class="casilla" id="c8"><span class="numero" id="n8">8</span><img class="sello-img" id="img8" src="logo-bn.png"></div>
+            <div class="casilla" id="c9"><span class="numero" id="n9">9</span><img class="sello-img" id="img9" src="logo-bn.png"></div>
+            <div class="casilla" id="c10"><span class="numero" id="n10">10</span><img class="sello-img" id="img10" src="logo-bn.png"></div>
         </div>
 
         <div class="status-box" id="status-text">
@@ -242,73 +235,53 @@
             🎁 ¡Reclamar Premio Recompensa!
         </button>
 
-        <div class="admin-panel">
-            <button class="admin-toggle" onclick="solicitarPin()">⚙️ Panel de Control Interno (Uso del Kiosko)</button>
-        </div>
+        <!-- Botón físico robusto que salta cualquier bloqueo de clic -->
+        <button class="btn-admin-fijo" id="boton-abrir-pin" onclick="solicitarPin()">
+            ⚙️ Panel de Control Interno (Uso del Kiosko)
+        </button>
     </div>
 </div>
 
 <script>
-    const PIN_SECRET = "8788"; 
+    const PIN_SECRET = "8788";
     const TOTAL_METAS = 10;
 
     let puntosActuales = parseInt(localStorage.getItem('puntos_hincha')) || 0;
 
-    function verificarNombreCliente() {
-        let nombreGuardado = localStorage.getItem('nombre_hincha');
-        
-        if (!nombreGuardado) {
-            let nombreIngresado = prompt("¡Hola Hincha! Para personalizar tu tarjeta de fidelidad, por favor ingresa tu Nombre:");
-            
-            if (nombreIngresado === null || nombreIngresado.trim() === "") {
-                nombreGuardado = "Hincha";
+    function gestionarNombre() {
+        let nombre = localStorage.getItem('nombre_hincha');
+        if (!nombre) {
+            nombre = prompt("¡Hola Hincha! Para personalizar tu tarjeta, ingresa tu Nombre:");
+            if (!nombre || nombre.trim() === "") {
+                nombre = "Hincha";
             } else {
-                nombreGuardado = nombreIngresado.trim();
+                nombre = nombre.trim();
             }
-            localStorage.setItem('nombre_hincha', nombreGuardado);
+            localStorage.setItem('nombre_hincha', nombre);
         }
-        
-        document.getElementById('saludo-texto').innerText = `¡Hola ${nombreGuardado}!`;
+        document.getElementById('saludo-texto').innerText = "¡Hola " + nombre + "!";
     }
 
-    function cambiarNombreManual() {
-        let nuevoNombre = prompt("Modificar nombre de la tarjeta:", localStorage.getItem('nombre_hincha') || "");
-        if (nuevoNombre !== null && nuevoNombre.trim() !== "") {
-            localStorage.setItem('nombre_hincha', nuevoNombre.trim());
-            document.getElementById('saludo-texto').innerText = `¡Hola ${nuevoNombre.trim()}!`;
-        }
-    }
-
-    function inicializarTablero() {
-        const tablero = document.getElementById('tablero');
-        tablero.innerHTML = '';
-        
+    function pintarTablero() {
         for (let i = 1; i <= TOTAL_METAS; i++) {
-            const casilla = document.createElement('div');
-            casilla.className = `casilla ${i <= puntosActuales ? 'sellada' : ''}`;
+            let casilla = document.getElementById("c" + i);
+            let numero = document.getElementById("n" + i);
+            let imagen = document.getElementById("img" + i);
             
-            const numero = document.createElement('span');
-            numero.className = 'numero';
-            numero.innerText = i;
-            
-            const imgSello = document.createElement('img');
-            imgSello.className = 'sello-img';
-            imgSello.src = "logo-bn.png";
-            imgSello.alt = "Sello Hincha";
-            
-            casilla.appendChild(numero);
-            casilla.appendChild(imgSello);
-            tablero.appendChild(casilla);
+            if (i <= puntosActuales) {
+                casilla.classList.add("sellada");
+                numero.style.display = "none";
+                imagen.style.display = "block";
+            } else {
+                casilla.classList.remove("sellada");
+                numero.style.display = "block";
+                imagen.style.display = "none";
+            }
         }
         
-        actualizarEstado();
-    }
-
-    function actualizarEstado() {
-        const statusText = document.getElementById('status-text');
-        const btnPremio = document.getElementById('btn-premio');
-        
-        statusText.innerText = `Tienes ${puntosActuales} / ${TOTAL_METAS} Sellos`;
+        let statusText = document.getElementById('status-text');
+        let btnPremio = document.getElementById('btn-premio');
+        statusText.innerText = "Tienes " + puntosActuales + " / " + TOTAL_METAS + " Sellos";
         
         if (puntosActuales >= TOTAL_METAS) {
             btnPremio.style.display = 'block';
@@ -320,22 +293,18 @@
     }
 
     function solicitarPin() {
-        const pinIngresado = prompt("Introduce el PIN de administración del Kiosko:");
-        
-        if (pinIngresado === null) return;
-        
-        if (pinIngresado !== PIN_SECRET) {
-            alert("❌ PIN incorrecto. Acceso denegado.");
-            return;
-        }
-
-        const opcion = prompt("PIN Correcto.\nEscribe '1' para Añadir Sello.\nEscribe '0' para Reiniciar la tarjeta a cero:");
-        
-        if (opcion === "1") {
-            if (puntosActuales < TOTAL_METAS) {
+        let pin = prompt("Introduce el PIN de administración del Kiosko:");
+if (pin === null) return;
+if (pin !== PIN_SECRET) {
+alert("❌ PIN incorrecto. Acceso denegado.");
+return;
+}
+let opcion = prompt("PIN Correcto.\nEscribe '1' para Añadir Sello.\nEscribe '0' para Reiniciar la tarjeta a cero:");
+if (opcion === "1") {
+if (puntosActuales < TOTAL_METAS) {
 puntosActuales++;
 localStorage.setItem('puntos_hincha', puntosActuales);
-inicializarTablero();
+pintarTablero();
 } else {
 alert("El cliente ya alcanzó la meta máxima. Debe reclamar el premio.");
 }
@@ -343,22 +312,13 @@ alert("El cliente ya alcanzó la meta máxima. Debe reclamar el premio.");
 if(confirm("¿Estás seguro de reiniciar la tarjeta a 0 sellos?")) {
 puntosActuales = 0;
 localStorage.setItem('puntos_hincha', puntosActuales);
-inicializarTablero();
+pintarTablero();
 }
-} else if (opcion !== null) {
-alert("Opción no válida.");
 }
 }
 function reclamarPremio() {
 alert("🎉 ¡Felicidades! Entrega el premio al Hincha y usa el panel interno con tu PIN para reiniciar su tarjeta.");
 }
-if ('serviceWorker' in navigator) {
-window.addEventListener('load', () => {
-navigator.serviceWorker.register('sw.js')
-.then(reg => console.log('Service Worker activo'))
-.catch(err => console.log('Error registrando SW', err));
-});
-}
-verificarNombreCliente();
-inicializarTablero();
+gestionarNombre();
+pintarTablero();
 
