@@ -89,21 +89,6 @@
             margin-bottom: 18px;
         }
 
-        .renglon-pasion {
-            font-size: 1.1rem;
-            color: #1a202c;
-            font-weight: 700;
-            display: block;
-            margin-bottom: 4px;
-        }
-
-        .renglon-premio {
-            font-size: 0.78rem;
-            color: #4a5568;
-            font-weight: 600;
-            display: block;
-        }
-
         .grid-tablero {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
@@ -235,19 +220,18 @@
 
 <div class="card-container">
     <div class="card-header">
-        <div class="saludo-dinamico" id="saludo-texto" onclick="reconfigurarNombre()">¡Hola!</div>
+        <div class="saludo-dinamico" id="saludo-texto" onclick="let n = prompt('Modificar nombre:', localStorage.getItem('nombre_hincha') || ''); if(n){localStorage.setItem('nombre_hincha', n.trim()); document.getElementById('saludo-texto').innerText = '¡Hola ' + n.trim() + '!';}">¡Hola!</div>
         <img src="logo-color.png" alt="La Casa Del Hincha">
         <h2>CLUB LCH</h2>
     </div>
     
     <div class="card-body">
         <div class="bloque-informativo">
-            <span class="renglon-pasion">¡Sella tu pasión!</span>
-            <span class="renglon-premio">Completa los 10 consumos y reclama tu premio de la casa</span>
+            <p style="font-size: 1.1rem; color: #1a202c; font-weight: 700; margin-bottom: 4px;">¡Sella tu pasión!</p>
+            <p style="font-size: 0.78rem; color: #4a5568; font-weight: 600;">Completa los 10 consumos y reclama tu premio de la casa</p>
         </div>
         
-        <!-- Tablero unificado corregido de forma exitosa -->
-        <div class="grid-tablero" id="tablero-fijo">
+        <div class="grid-tablero">
             <div class="casilla" id="c1"><span class="numero" id="n1">1</span><img class="sello-img" id="img1" src="logo-bn.png"></div>
             <div class="casilla" id="c2"><span class="numero" id="n2">2</span><img class="sello-img" id="img2" src="logo-bn.png"></div>
             <div class="casilla" id="c3"><span class="numero" id="n3">3</span><img class="sello-img" id="img3" src="logo-bn.png"></div>
@@ -260,15 +244,13 @@
             <div class="casilla" id="c10"><span class="numero" id="n10">10</span><img class="sello-img" id="img10" src="logo-bn.png"></div>
         </div>
 
-        <div class="status-box" id="status-text">
-            Tienes 0 / 10 Sellos
-        </div>
+        <div class="status-box" id="status-text">Tienes 0 / 10 Sellos</div>
 
         <div class="reglas-adicionales">
             * 1 Sello por cada $5.00 USD de consumo, 1 sello por semana.
         </div>
 
-        <button class="btn-premio" id="btn-premio" onclick="reclamarPremio()">
+        <button class="btn-premio" id="btn-premio" onclick="alert('🎉 ¡Felicidades! Entrega el premio al Hincha y usa el panel interno para reiniciar su tarjeta.')">
             🎁 ¡Reclamar Premio Recompensa!
         </button>
 
@@ -283,93 +265,69 @@
                 <option value="0">🔄 Reiniciar Tarjeta a 0</option>
             </select>
             <div class="botones-admin-grid">
-                <button class="btn-panel-ejecutar btn-panel-ok" onclick="ejecutarAccionKioskoDirecta()">Confirmar</button>
-                <button class="btn-panel-ejecutar btn-panel-cancelar" onclick="document.getElementById('panel-pin-interno').style.display='none'; document.getElementById('boton-abrir-pin').style.display='block'; document.getElementById('input-pin-fijo').value='';">Cancelar</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-    const PIN_SECRET = "8788";
-    const TOTAL_METAS = 10;
-
-let puntosActuales = parseInt(localStorage.getItem('puntos_hincha')) || 0;
-function gestionarNombre() {
-let nombre = localStorage.getItem('nombre_hincha');
-if (!nombre) {
-nombre = prompt("¡Hola Hincha! Para personalizar tu tarjeta, ingresa tu Nombre:");
-if (!nombre || nombre.trim() === "") {
-nombre = "Hincha";
+                <button class="btn-panel-ejecutar btn-panel-ok" onclick="
+                    let p = document.getElementById('input-pin-fijo').value;
+                    let a = document.getElementById('select-accion-fijo').value;
+                    if (p !== '8788') {
+                        alert('❌ PIN incorrecto.');
+                    } else {
+                        let pts = parseInt(localStorage.getItem('puntos_hincha')) || 0;
+                        if (a === '1') { 
+                            if (pts < 10) { pts++; localStorage.setItem('puntos_hincha', pts); } 
+                        } else if (a === '0') { 
+if (confirm('¿Reiniciar tarjeta?')) { pts = 0; localStorage.setItem('puntos_hincha', pts); }
+}
+for (let i = 1; i <= 10; i++) {
+let casilla = document.getElementById('c' + i);
+let numero = document.getElementById('n' + i);
+let imagen = document.getElementById('img' + i);
+if (i <= pts) {
+casilla.classList.add('sellada'); numero.style.display = 'none'; imagen.style.display = 'block';
 } else {
-nombre = nombre.trim();
-}
-localStorage.setItem('nombre_hincha', nombre);
-}
-document.getElementById('saludo-texto').innerText = "¡Hola " + nombre + "!";
-}
-function reconfigurarNombre() {
-let actual = localStorage.getItem('nombre_hincha') || "Hincha";
-let nuevo = prompt("Modificar nombre de la tarjeta:", actual);
-if (nuevo !== null && nuevo.trim() !== "") {
-localStorage.setItem('nombre_hincha', nuevo.trim());
-document.getElementById('saludo-texto').innerText = "¡Hola " + nuevo.trim() + "!";
+casilla.classList.remove('sellada'); numero.style.display = 'block'; imagen.style.display = 'none';
 }
 }
-function pintarTablero() {
-for (let i = 1; i <= TOTAL_METAS; i++) {
-let casilla = document.getElementById("c" + i);
-let numero = document.getElementById("n" + i);
-let imagen = document.getElementById("img" + i);
-if (i <= puntosActuales) {
-casilla.classList.add("sellada");
-numero.style.display = "none";
-imagen.style.display = "block";
+document.getElementById('status-text').innerText = 'Tienes ' + pts + ' / 10 Sellos';
+if (pts >= 10) {
+document.getElementById('btn-premio').style.display = 'block';
+document.getElementById('status-text').style.backgroundColor = '#10b981';
 } else {
-casilla.classList.remove("sellada");
-numero.style.display = "block";
-imagen.style.display = "none";
-}
-}
-let statusText = document.getElementById('status-text');
-let btnPremio = document.getElementById('btn-premio');
-statusText.innerText = "Tienes " + puntosActuales + " / " + TOTAL_METAS + " Sellos";
-if (puntosActuales >= TOTAL_METAS) {
-btnPremio.style.display = 'block';
-statusText.style.backgroundColor = '#10b981';
-} else {
-btnPremio.style.display = 'none';
-statusText.style.backgroundColor = 'var(--azul-oscuro)';
-}
-}
-function ejecutarAccionKioskoDirecta() {
-let pin = document.getElementById('input-pin-fijo').value;
-let accion = document.getElementById('select-accion-fijo').value;
-if (pin !== PIN_SECRET) {
-alert("❌ PIN incorrecto. Acceso denegado.");
-return;
-}
-if (accion === "1") {
-if (puntosActuales < TOTAL_METAS) {
-puntosActuales++;
-localStorage.setItem('puntos_hincha', puntosActuales);
-pintarTablero();
-} else {
-alert("El cliente ya alcanzó la meta máxima. Debe reclamar el premio.");
-}
-} else if (accion === "0") {
-if(confirm("¿Estás seguro de reiniciar la tarjeta a 0 sellos?")) {
-puntosActuales = 0;
-localStorage.setItem('puntos_hincha', puntosActuales);
-pintarTablero();
-}
+document.getElementById('btn-premio').style.display = 'none';
+document.getElementById('status-text').style.backgroundColor = '#0d2347';
 }
 document.getElementById('panel-pin-interno').style.display = 'none';
 document.getElementById('boton-abrir-pin').style.display = 'block';
 document.getElementById('input-pin-fijo').value = '';
 }
-function reclamarPremio() {
-alert("🎉 ¡Felicidades! Entrega el premio al Hincha y usa el panel interno para reiniciar su tarjeta.");
+
+let puntosActuales = parseInt(localStorage.getItem('puntos_hincha')) || 0;
+let nombre = localStorage.getItem('nombre_hincha');
+if (!nombre) {
+nombre = prompt("¡Hola Hincha! Para personalizar tu tarjeta, ingresa tu Nombre:");
+if (!nombre || nombre.trim() === "") { nombre = "Hincha"; }
+else { nombre = nombre.trim(); }
+localStorage.setItem('nombre_hincha', nombre);
 }
-gestionarNombre();
-pintarTablero();
+document.getElementById('saludo-texto').innerText = "¡Hola " + nombre + "!";
+for (let i = 1; i <= 10; i++) {
+let casilla = document.getElementById('c' + i);
+let numero = document.getElementById('n' + i);
+let imagen = document.getElementById('img' + i);
+if (i <= puntosActuales) {
+casilla.classList.add('sellada');
+numero.style.display = 'none';
+imagen.style.display = 'block';
+} else {
+casilla.classList.remove('sellada');
+numero.style.display = 'block';
+imagen.style.display = 'none';
+}
+}
+document.getElementById('status-text').innerText = "Tienes " + puntosActuales + " / 10 Sellos";
+if (puntosActuales >= 10) {
+document.getElementById('btn-premio').style.display = 'block';
+document.getElementById('status-text').style.backgroundColor = '#10b981';
+} else {
+document.getElementById('btn-premio').style.display = 'none';
+document.getElementById('status-text').style.backgroundColor = 'var(--azul-oscuro)';
+}
