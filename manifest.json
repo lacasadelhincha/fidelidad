@@ -1,7 +1,7 @@
 {
   "name": "La Casa del Hincha Fidelidad",
-  "short_name": "HinchaCard",
-  "start_url": "./index.html",
+  "short_name": "Hincha-Card",
+  "start_url": "./tarjeta.html",
   "display": "standalone",
   "background_color": "#0d2347",
   "theme-color": "#b61c1c",
