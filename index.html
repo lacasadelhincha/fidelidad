@@ -57,6 +57,7 @@
             font-weight: bold;
             margin-bottom: 12px;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+            cursor: pointer;
         }
 
         .card-header img {
@@ -103,7 +104,6 @@
             display: block;
         }
 
-        /* Forzamos a que la cuadrícula exista directamente en el diseño básico */
         .grid-tablero {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
@@ -179,7 +179,6 @@
             margin-bottom: 15px;
         }
 
-        /* Convertimos el panel en un botón físico grande para que no falle el clic */
         .btn-admin-fijo {
             width: 100%;
             background-color: #cbd5e1;
@@ -192,13 +191,50 @@
             cursor: pointer;
             margin-top: 15px;
         }
+
+        /* NUEVO PANEL DE PIN INTEGRADO INMUNE A BLOQUEOS */
+        .contenedor-pin-interno {
+            display: none;
+            margin-top: 12px;
+            background-color: #eddcd2;
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #cb997e;
+        }
+
+        .contenedor-pin-interno input, .contenedor-pin-interno select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            text-align: center;
+            font-size: 1rem;
+        }
+
+        .botones-admin-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .btn-panel-ejecutar {
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .btn-panel-ok { background-color: var(--azul-oscuro); }
+        .btn-panel-cancelar { background-color: var(--rojo-principal); }
     </style>
 </head>
 <body>
 
 <div class="card-container">
     <div class="card-header">
-        <div class="saludo-dinamico" id="saludo-texto">¡Hola!</div>
+        <div class="saludo-dinamico" id="saludo-texto" onclick="reconfigurarNombre()">¡Hola!</div>
         <img src="logo-color.png" alt="La Casa Del Hincha">
         <h2>CLUB LCH</h2>
     </div>
@@ -209,7 +245,6 @@
             <span class="renglon-premio">Completa los 10 consumos y reclama tu premio de la casa</span>
         </div>
         
-        <!-- Cuadrícula fija grabada en la estructura HTML base -->
         <div class="grid-tablero" id="tablero-fijo">
             <div class="casilla" id="c1"><span class="numero" id="n1">1</span><img class="sello-img" id="img1" src="logo-bn.png"></div>
             <div class="casilla" id="c2"><span class="numero" id="n2">2</span><img class="sello-img" id="img2" src="logo-bn.png"></div>
@@ -235,10 +270,22 @@
             🎁 ¡Reclamar Premio Recompensa!
         </button>
 
-        <!-- Botón físico robusto que salta cualquier bloqueo de clic -->
-        <button class="btn-admin-fijo" id="boton-abrir-pin" onclick="solicitarPin()">
+        <button class="btn-admin-fijo" id="boton-abrir-pin" onclick="mostrarPanelPin()">
             ⚙️ Panel de Control Interno (Uso del Kiosko)
         </button>
+
+        <!-- CAJITA DE PIN INTEGRADA VISUALMENTE -->
+        <div class="contenedor-pin-interno" id="panel-pin-interno">
+            <input type="password" id="input-pin-fijo" placeholder="Introduce PIN de Kiosko" inputmode="numeric">
+            <select id="select-accion-fijo">
+                <option value="1">➕ Añadir Sello</option>
+                <option value="0">🔄 Reiniciar Tarjeta a 0</option>
+            </select>
+            <div class="botones-admin-grid">
+                <button class="btn-panel-ejecutar btn-panel-ok" onclick="procesarAccionKiosko()">Confirmar</button>
+                <button class="btn-panel-ejecutar btn-panel-cancelar" onclick="ocultarPanelPin()">Cancelar</button>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -252,55 +299,66 @@
         let nombre = localStorage.getItem('nombre_hincha');
         if (!nombre) {
             nombre = prompt("¡Hola Hincha! Para personalizar tu tarjeta, ingresa tu Nombre:");
-            if (!nombre || nombre.trim() === "") {
-                nombre = "Hincha";
-            } else {
-                nombre = nombre.trim();
-            }
-            localStorage.setItem('nombre_hincha', nombre);
-        }
-        document.getElementById('saludo-texto').innerText = "¡Hola " + nombre + "!";
-    }
-
-    function pintarTablero() {
-        for (let i = 1; i <= TOTAL_METAS; i++) {
-            let casilla = document.getElementById("c" + i);
-            let numero = document.getElementById("n" + i);
-            let imagen = document.getElementById("img" + i);
-            
-            if (i <= puntosActuales) {
-                casilla.classList.add("sellada");
-                numero.style.display = "none";
-                imagen.style.display = "block";
-            } else {
-                casilla.classList.remove("sellada");
-                numero.style.display = "block";
-                imagen.style.display = "none";
-            }
-        }
-        
-        let statusText = document.getElementById('status-text');
-        let btnPremio = document.getElementById('btn-premio');
-        statusText.innerText = "Tienes " + puntosActuales + " / " + TOTAL_METAS + " Sellos";
-        
-        if (puntosActuales >= TOTAL_METAS) {
-            btnPremio.style.display = 'block';
-            statusText.style.backgroundColor = '#10b981';
-        } else {
-            btnPremio.style.display = 'none';
-            statusText.style.backgroundColor = 'var(--azul-oscuro)';
-        }
-    }
-
-    function solicitarPin() {
-        let pin = prompt("Introduce el PIN de administración del Kiosko:");
-if (pin === null) return;
+if (!nombre || nombre.trim() === "") {
+nombre = "Hincha";
+} else {
+nombre = nombre.trim();
+}
+localStorage.setItem('nombre_hincha', nombre);
+}
+document.getElementById('saludo-texto').innerText = "¡Hola " + nombre + "!";
+}
+function reconfigurarNombre() {
+let actual = localStorage.getItem('nombre_hincha') || "Hincha";
+let nuevo = prompt("Modificar nombre de la tarjeta:", actual);
+if (nuevo !== null && nuevo.trim() !== "") {
+localStorage.setItem('nombre_hincha', nuevo.trim());
+document.getElementById('saludo-texto').innerText = "¡Hola " + nuevo.trim() + "!";
+}
+}
+function pintarTablero() {
+for (let i = 1; i <= TOTAL_METAS; i++) {
+let casilla = document.getElementById("c" + i);
+let numero = document.getElementById("n" + i);
+let imagen = document.getElementById("img" + i);
+if (i <= puntosActuales) {
+casilla.classList.add("sellada");
+numero.style.display = "none";
+imagen.style.display = "block";
+} else {
+casilla.classList.remove("sellada");
+numero.style.display = "block";
+imagen.style.display = "none";
+}
+}
+let statusText = document.getElementById('status-text');
+let btnPremio = document.getElementById('btn-premio');
+statusText.innerText = "Tienes " + puntosActuales + " / " + TOTAL_METAS + " Sellos";
+if (puntosActuales >= TOTAL_METAS) {
+btnPremio.style.display = 'block';
+statusText.style.backgroundColor = '#10b981';
+} else {
+btnPremio.style.display = 'none';
+statusText.style.backgroundColor = 'var(--azul-oscuro)';
+}
+}
+function mostrarPanelPin() {
+document.getElementById('panel-pin-interno').style.display = 'block';
+document.getElementById('boton-abrir-pin').style.display = 'none';
+}
+function ocultarPanelPin() {
+document.getElementById('panel-pin-interno').style.display = 'none';
+document.getElementById('boton-abrir-pin').style.display = 'block';
+document.getElementById('input-pin-fijo').value = '';
+}
+function procesarAccionKiosko() {
+let pin = document.getElementById('input-pin-fijo').value;
+let accion = document.getElementById('select-accion-fijo').value;
 if (pin !== PIN_SECRET) {
 alert("❌ PIN incorrecto. Acceso denegado.");
 return;
 }
-let opcion = prompt("PIN Correcto.\nEscribe '1' para Añadir Sello.\nEscribe '0' para Reiniciar la tarjeta a cero:");
-if (opcion === "1") {
+if (accion === "1") {
 if (puntosActuales < TOTAL_METAS) {
 puntosActuales++;
 localStorage.setItem('puntos_hincha', puntosActuales);
@@ -308,17 +366,17 @@ pintarTablero();
 } else {
 alert("El cliente ya alcanzó la meta máxima. Debe reclamar el premio.");
 }
-} else if (opcion === "0") {
+} else if (accion === "0") {
 if(confirm("¿Estás seguro de reiniciar la tarjeta a 0 sellos?")) {
 puntosActuales = 0;
 localStorage.setItem('puntos_hincha', puntosActuales);
 pintarTablero();
 }
 }
+ocultarPanelPin();
 }
 function reclamarPremio() {
-alert("🎉 ¡Felicidades! Entrega el premio al Hincha y usa el panel interno con tu PIN para reiniciar su tarjeta.");
+alert("🎉 ¡Felicidades! Entrega el premio al Hincha y usa el panel interno para reiniciar su tarjeta.");
 }
 gestionarNombre();
 pintarTablero();
-
