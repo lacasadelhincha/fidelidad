@@ -184,15 +184,14 @@
             background-color: #cbd5e1;
             color: #4a5568;
             border: 1px solid #94a3b8;
-            padding: 10px;
+            padding: 12px;
             border-radius: 8px;
-            font-size: 0.85rem;
+            font-size: 0.88rem;
             font-weight: bold;
             cursor: pointer;
             margin-top: 15px;
         }
 
-        /* NUEVO PANEL DE PIN INTEGRADO INMUNE A BLOQUEOS */
         .contenedor-pin-interno {
             display: none;
             margin-top: 12px;
@@ -262,19 +261,20 @@
             Tienes 0 / 10 Sellos
         </div>
 
+        <!-- SÍMBOLO DE MONEDA ($) CORRECTAMENTE AGREGADO AQUÍ -->
         <div class="reglas-adicionales">
-            * 1 Sello por cada 5.00 USD de consumo, 1 sello por semana.
+            * 1 Sello por cada $5.00 USD de consumo, 1 sello por semana.
         </div>
 
         <button class="btn-premio" id="btn-premio" onclick="reclamarPremio()">
             🎁 ¡Reclamar Premio Recompensa!
         </button>
 
-        <button class="btn-admin-fijo" id="boton-abrir-pin" onclick="mostrarPanelPin()">
+        <!-- Nueva función forzada conectada directamente al botón físico -->
+        <button class="btn-admin-fijo" id="boton-abrir-pin" onclick="abrirCajaPinNueva()">
             ⚙️ Panel de Control Interno (Uso del Kiosko)
         </button>
 
-        <!-- CAJITA DE PIN INTEGRADA VISUALMENTE -->
         <div class="contenedor-pin-interno" id="panel-pin-interno">
             <input type="password" id="input-pin-fijo" placeholder="Introduce PIN de Kiosko" inputmode="numeric">
             <select id="select-accion-fijo">
@@ -342,7 +342,8 @@ btnPremio.style.display = 'none';
 statusText.style.backgroundColor = 'var(--azul-oscuro)';
 }
 }
-function mostrarPanelPin() {
+// Nombre de función totalmente nuevo para burlar el congelamiento de memoria de la PC
+function abrirCajaPinNueva() {
 document.getElementById('panel-pin-interno').style.display = 'block';
 document.getElementById('boton-abrir-pin').style.display = 'none';
 }
@@ -380,3 +381,4 @@ alert("🎉 ¡Felicidades! Entrega el premio al Hincha y usa el panel interno pa
 }
 gestionarNombre();
 pintarTablero();
+
