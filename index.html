@@ -179,6 +179,7 @@
             margin-bottom: 15px;
         }
 
+        /* DISEÑO REFORZADO INTERNO PARA EVITAR CONGELAMIENTOS */
         .btn-admin-fijo {
             width: 100%;
             background-color: #cbd5e1;
@@ -190,6 +191,7 @@
             font-weight: bold;
             cursor: pointer;
             margin-top: 15px;
+            display: block !important;
         }
 
         .contenedor-pin-interno {
@@ -209,6 +211,7 @@
             border-radius: 6px;
             text-align: center;
             font-size: 1rem;
+            color: #333;
         }
 
         .botones-admin-grid {
@@ -261,7 +264,6 @@
             Tienes 0 / 10 Sellos
         </div>
 
-        <!-- SÍMBOLO DE MONEDA ($) FIJADO -->
         <div class="reglas-adicionales">
             * 1 Sello por cada $5.00 USD de consumo, 1 sello por semana.
         </div>
@@ -270,7 +272,8 @@
             🎁 ¡Reclamar Premio Recompensa!
         </button>
 
-        <button class="btn-admin-fijo" id="boton-abrir-pin" onclick="abrirCajaPinNueva()">
+        <!-- Botón de acción con activación directa por ID libre de fallos de compilación -->
+        <button class="btn-admin-fijo" id="boton-abrir-pin" onclick="document.getElementById('panel-pin-interno').style.display='block'; document.getElementById('boton-abrir-pin').style.display='none';">
             ⚙️ Panel de Control Interno (Uso del Kiosko)
         </button>
 
@@ -282,24 +285,20 @@
             </select>
             <div class="botones-admin-grid">
                 <button class="btn-panel-ejecutar btn-panel-ok" onclick="procesarAccionKiosko()">Confirmar</button>
-                <button class="btn-panel-ejecutar btn-panel-cancelar" onclick="ocultarPanelPin()">Cancelar</button>
+                <button class="btn-panel-ejecutar btn-panel-cancelar" onclick="document.getElementById('panel-pin-interno').style.display='none'; document.getElementById('boton-abrir-pin').style.display='block'; document.getElementById('input-pin-fijo').value='';">Cancelar</button>
             </div>
         </div>
     </div>
 </div>
-
-<script>
-    const PIN_SECRET = "8788";
-    const TOTAL_METAS = 10;
-
-    let puntosActuales = parseInt(localStorage.getItem('puntos_hincha')) || 0;
-
-    function gestionarNombre() {
-        let nombre = localStorage.getItem('nombre_hincha');
-        if (!nombre) {
-            nombre = prompt("¡Hola Hincha! Para personalizar tu tarjeta, ingresa tu Nombre:");
-            if (!nombre || nombre.trim() === "") {
-                nombre = "Hincha";
+const PIN_SECRET = "8788";
+const TOTAL_METAS = 10;
+let puntosActuales = parseInt(localStorage.getItem('puntos_hincha')) || 0;
+function gestionarNombre() {
+let nombre = localStorage.getItem('nombre_hincha');
+if (!nombre) {
+nombre = prompt("¡Hola Hincha! Para personalizar tu tarjeta, ingresa tu Nombre:");
+if (!nombre || nombre.trim() === "") {
+nombre = "Hincha";
 } else {
 nombre = nombre.trim();
 }
@@ -341,15 +340,6 @@ btnPremio.style.display = 'none';
 statusText.style.backgroundColor = 'var(--azul-oscuro)';
 }
 }
-function abrirCajaPinNueva() {
-document.getElementById('panel-pin-interno').style.display = 'block';
-document.getElementById('boton-abrir-pin').style.display = 'none';
-}
-function ocultarPanelPin() {
-document.getElementById('panel-pin-interno').style.display = 'none';
-document.getElementById('boton-abrir-pin').style.display = 'block';
-document.getElementById('input-pin-fijo').value = '';
-}
 function procesarAccionKiosko() {
 let pin = document.getElementById('input-pin-fijo').value;
 let accion = document.getElementById('select-accion-fijo').value;
@@ -372,7 +362,9 @@ localStorage.setItem('puntos_hincha', puntosActuales);
 pintarTablero();
 }
 }
-ocultarPanelPin();
+document.getElementById('panel-pin-interno').style.display = 'none';
+document.getElementById('boton-abrir-pin').style.display = 'block';
+document.getElementById('input-pin-fijo').value = '';
 }
 function reclamarPremio() {
 alert("🎉 ¡Felicidades! Entrega el premio al Hincha y usa el panel interno para reiniciar su tarjeta.");
