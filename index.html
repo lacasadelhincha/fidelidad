@@ -235,7 +235,7 @@
 
 <div class="card-container">
     <div class="card-header">
-        <div class="saludo-dinamico" id="saludo-texto" onclick="reconfigurarNombre()">¡Hola Hincha!</div>
+        <div class="saludo-dinamico" id="saludo-texto" onclick="reconfigurarNombre()">¡Hola!</div>
         <img src="logo-color.png" alt="La Casa Del Hincha">
         <h2>CLUB LCH</h2>
     </div>
@@ -246,6 +246,7 @@
             <span class="renglon-premio">Completa los 10 consumos y reclama tu premio de la casa</span>
         </div>
         
+        <!-- Tablero unificado corregido de forma exitosa -->
         <div class="grid-tablero" id="tablero-fijo">
             <div class="casilla" id="c1"><span class="numero" id="n1">1</span><img class="sello-img" id="img1" src="logo-bn.png"></div>
             <div class="casilla" id="c2"><span class="numero" id="n2">2</span><img class="sello-img" id="img2" src="logo-bn.png"></div>
@@ -271,7 +272,6 @@
             🎁 ¡Reclamar Premio Recompensa!
         </button>
 
-        <!-- ACCIÓN INYECTADA DIRECTAMENTE EN EL ELEMENTO HTML: INFALIBLE -->
         <button class="btn-admin-fijo" id="boton-abrir-pin" onclick="document.getElementById('panel-pin-interno').style.display='block'; document.getElementById('boton-abrir-pin').style.display='none';">
             ⚙️ Panel de Control Interno (Uso del Kiosko)
         </button>
@@ -283,7 +283,7 @@
                 <option value="0">🔄 Reiniciar Tarjeta a 0</option>
             </select>
             <div class="botones-admin-grid">
-                <button class="btn-panel-ejecutar btn-panel-ok" onclick="procesarAccionKiosko()">Confirmar</button>
+                <button class="btn-panel-ejecutar btn-panel-ok" onclick="ejecutarAccionKioskoDirecta()">Confirmar</button>
                 <button class="btn-panel-ejecutar btn-panel-cancelar" onclick="document.getElementById('panel-pin-interno').style.display='none'; document.getElementById('boton-abrir-pin').style.display='block'; document.getElementById('input-pin-fijo').value='';">Cancelar</button>
             </div>
         </div>
@@ -293,6 +293,7 @@
 <script>
     const PIN_SECRET = "8788";
     const TOTAL_METAS = 10;
+
 let puntosActuales = parseInt(localStorage.getItem('puntos_hincha')) || 0;
 function gestionarNombre() {
 let nombre = localStorage.getItem('nombre_hincha');
@@ -341,7 +342,7 @@ btnPremio.style.display = 'none';
 statusText.style.backgroundColor = 'var(--azul-oscuro)';
 }
 }
-function procesarAccionKiosko() {
+function ejecutarAccionKioskoDirecta() {
 let pin = document.getElementById('input-pin-fijo').value;
 let accion = document.getElementById('select-accion-fijo').value;
 if (pin !== PIN_SECRET) {
