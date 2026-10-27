@@ -5,6 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#b61c1c">
 <meta name="description" content="Tarjeta de fidelidad offline de La Casa del Hincha">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Club LCH">
+<link rel="apple-touch-icon" href="icon-192.png">
 <link rel="manifest" href="manifest.json">
 <title>La Casa del Hincha - Fidelidad</title>
 <style>
@@ -62,6 +67,7 @@ async function anadirSello(){if(!validarPIN())return;if(puntosActuales>=TOTAL_ME
 async function reiniciarTarjeta(){if(!validarPIN())return;if(puntosActuales===0){alert('ℹ️ La tarjeta ya tiene 0 sellos.');cerrarPanelKiosko();return}if(!confirm('⚠️ ATENCIÓN\n\n¿Seguro que deseas reiniciar esta tarjeta a 0 sellos?\n\nSellos actuales: '+puntosActuales+' / '+TOTAL_METAS))return;puntosActuales=0;await guardarPuntos();pintarTablero();alert('🔄 Tarjeta reiniciada correctamente.');cerrarPanelKiosko()}
 function reclamarPremio(){if(puntosActuales<TOTAL_METAS){alert('ℹ️ La tarjeta todavía no está completa.');return}alert('🎉 ¡Felicidades, '+nombreActual+'!\n\nHas completado los 10 sellos.\n\nEntrega el premio correspondiente y, cuando el premio haya sido entregado, usa «Reiniciar Tarjeta».')}
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstallPrompt=e;document.getElementById('btn-install').style.display='block'});
+window.addEventListener('DOMContentLoaded',()=>{if(window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true)document.getElementById('btn-install').style.display='none'});
 async function instalarApp(){if(!deferredInstallPrompt){alert('Para instalarla, usa el menú del navegador y elige «Añadir a pantalla de inicio» o «Instalar aplicación».');return}deferredInstallPrompt.prompt();await deferredInstallPrompt.userChoice;deferredInstallPrompt=null;document.getElementById('btn-install').style.display='none'}
 window.addEventListener('appinstalled',()=>{document.getElementById('btn-install').style.display='none'});
 function actualizarEstado(){const el=document.getElementById('estado-offline');if(navigator.onLine){el.textContent='🌐 Con conexión • datos guardados localmente';el.className='estado-offline online'}else{el.textContent='📴 Sin Internet • la app sigue funcionando';el.className='estado-offline offline'}}

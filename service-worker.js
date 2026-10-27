@@ -1,11 +1,13 @@
-const CACHE_NAME = 'lch-fidelidad-v2';
+const CACHE_NAME = 'lch-fidelidad-v3';
 const APP_SHELL = [
   './',
   './index.html',
   './manifest.json',
   './service-worker.js',
   './logo-color.png',
-  './logo-bn.png'
+  './logo-bn.png',
+  './icon-192.png',
+  './icon-512.png'
 ];
 
 self.addEventListener('install', event => {

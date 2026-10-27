@@ -2,14 +2,24 @@
   "name": "La Casa del Hincha - Fidelidad",
   "short_name": "Club LCH",
   "description": "Tarjeta de fidelidad offline de La Casa del Hincha",
-  "start_url": "./",
-  "scope": "./",
+  "start_url": "/fidelidad/",
+  "scope": "/fidelidad/",
   "display": "standalone",
   "background_color": "#0d2347",
   "theme_color": "#b61c1c",
   "orientation": "portrait",
   "icons": [
-    {"src":"logo-color.png","sizes":"192x192","type":"image/png","purpose":"any maskable"},
-    {"src":"logo-color.png","sizes":"512x512","type":"image/png","purpose":"any maskable"}
+    {
+      "src": "/fidelidad/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/fidelidad/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
   ]
 }
