@@ -1,32 +1,26 @@
-LA CASA DEL HINCHA - PWA NIVEL 1
+LA CASA DEL HINCHA - PWA FIDELIDAD
+NIVEL 1 FINAL - FONDO ESTADIO + LOGOS CORREGIDOS
 
-Version: Nivel 1 definitivo / offline-first / multiplataforma
-
-Archivos que deben estar en la raiz de GitHub Pages:
+Contenido:
 - index.html
 - manifest.json
 - service-worker.js
-- logo-color.png
-- logo-bn.png
-- icon-192.png
-- icon-512.png
-- apple-touch-icon.png
+- logo-color.png (logo a color, transparente, usado en la cabecera)
+- logo-bn.png (logo B/N, transparente, usado para los sellos)
+- icon-192.png (icono PWA a color, transparente)
+- icon-512.png (icono PWA a color, transparente)
+- apple-touch-icon.png (icono para iPhone/iPad, transparente)
+- fondo-app.jpg (fondo vertical de estadio)
 
-Compatibilidad objetivo:
-- Android: Chrome/Edge y navegadores compatibles con PWA
-- iPhone/iPad: Safari y navegadores basados en WebKit compatibles con web apps
-- Windows/macOS/Linux/ChromeOS: navegadores modernos compatibles
-
-Funciones:
-- 10 sellos
-- IndexedDB offline
-- Migracion de puntos/nombre antiguos desde localStorage
-- Identificador local de dispositivo y marca de ultima modificacion, preparados para Nivel 2
-- Service Worker offline
-- Instalacion PWA en navegadores compatibles
-- Guia de instalacion para iPhone/iPad
-- Responsive y safe-area para pantallas con notch
+Cambios de esta versión:
+1. Se conserva la lógica de los 10 sellos, IndexedDB y funcionamiento offline.
+2. Los sellos muestran el logo B/N sin rectángulo negro de fondo.
+3. El icono de instalación usa el logo a color sin fondo sólido.
+4. Se añade fondo de estadio detrás de la tarjeta.
+5. El fondo se incluye en el Service Worker para que funcione offline.
+6. Service Worker actualizado a caché v5 para forzar la nueva versión.
 
 IMPORTANTE:
-Nivel 1 NO sincroniza datos entre dispositivos. Cada dispositivo mantiene su propia informacion local.
-Nivel 2 agregara una base de datos en la nube y sincronizacion.
+- Reemplazar los archivos del repositorio por los de esta carpeta.
+- No borrar logo-color.png ni logo-bn.png: ambos ya están corregidos.
+- Después de publicar en GitHub Pages, puede ser necesario cerrar/reabrir la PWA o borrar la caché del sitio para que el Service Worker v5 tome los nuevos archivos.

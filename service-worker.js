@@ -1,4 +1,4 @@
-const CACHE_NAME = 'lch-fidelidad-v4';
+const CACHE_NAME = 'lch-fidelidad-v5';
 const APP_SHELL = [
   './',
   './index.html',
@@ -8,7 +8,8 @@ const APP_SHELL = [
   './logo-bn.png',
   './icon-192.png',
   './icon-512.png',
-  './apple-touch-icon.png'
+  './apple-touch-icon.png',
+  './fondo-app.jpg'
 ];
 
 self.addEventListener('install', event => {
